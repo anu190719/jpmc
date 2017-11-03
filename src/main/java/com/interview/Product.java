@@ -1,6 +1,6 @@
 package com.interview;
 
-public class Product implements Comparable<Product> {
+public class Product {
 
 	private String type;
 	private long value;
@@ -33,11 +33,14 @@ public class Product implements Comparable<Product> {
 		// TODO Auto-generated method stub
 		return type + " : " + value + " : " + size;
 	}
-
-	public int compareTo(Product o) {
-		return o.getType().compareTo(this.getType());
+	public int hashcode(){
+		int tmp=0;
+		tmp=(type+value+size).hashCode();
+		return tmp;
+		
 	}
 
+	
 	@Override
 	public boolean equals(Object obj) {
 		Product product = (Product) obj;
