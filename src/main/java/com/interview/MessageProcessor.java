@@ -2,7 +2,6 @@ package com.interview;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +62,7 @@ public class MessageProcessor {
 				Product product = iterator.next();
 				if (product.getType().equals(values[2])) {
 					product.setValue(product.getValue() + value);
+					System.out.println(product.getValue());
 				}
 			}
 			return true;
@@ -72,6 +72,7 @@ public class MessageProcessor {
 				Product product = iterator.next();
 				if (product.getType().equals(values[2])) {
 					product.setValue(product.getValue() - value);
+					System.out.println(product.getValue());
 				}
 			}
 			return true;
