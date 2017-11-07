@@ -1,4 +1,4 @@
-package com.interview;
+package com.interview.beans;
 
 public class Product {
 

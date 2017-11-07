@@ -1,4 +1,4 @@
-package com.interview;
+package com.interview.messageprocess;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,26 +7,46 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class MessageProcessor {
+import com.interview.beans.Product;
+/**
+ * MessageProcessor.java
+ * @author anu
+ *
+ */
+public class MessageProcessor{
 	private List<Product> queue = new ArrayList<Product>();
 	private int count = 0;
 
+	/**
+	 * processes "apple at 10p" messages and prints the report at certain threshold(10).
+	 * accepts the data till 50 messages.
+	 * @param message
+	 * @return boolean
+	 */
 	public boolean processType1(String message) {
 		if (message == null) {
 			return false;
 		}
+		// verifies no.of counts 
 		if (count++ > 50) {
 			System.out.println("Processor is pausing, stopped accepting new messages");
 			return false;
 		}
-		String[] values = message.split(" ");
+		String[] values = message.split(" "); 
+		// set the message data to Product bean
 		Product product = new Product(values[0], Long.parseLong(values[2].substring(0, values[2].length() - 1)), 1);
 		queue.add(product);
+		// if queue size reaches multiple of 10 print report
 		if (queue.size() % 10 == 0) {
-			printDetailedReport();
+			printDetailedReport1();
 		}
 		return true;
 	}
+	/**
+	 * processes "20 sales of apples at 10p" messages and prints the report at certain threshold(10).
+	 * @param message
+	 * @return boolean
+	 */
 
 	public boolean processType2(String message) {
 		if (message == null) {
@@ -37,15 +57,19 @@ public class MessageProcessor {
 			return false;
 		}
 		String[] values = message.split(" ");
-		Product product = new Product(values[3], Long.parseLong(values[5].substring(0, values[2].length() - 1)),
+		Product product = new Product(values[1], Long.parseLong(values[5].substring(0, values[5].length() - 1)),
 				Integer.parseInt(values[0]));
 		queue.add(product);
 		if (queue.size() % 10 == 0) {
-			System.out.println("print logs");
+			printDetailedReport2();
 		}
 		return true;
 	}
-
+	/**
+	 * processes "Add,Subtract,multiply " messages and prints the report at certain threshold(10).
+	 * @param message
+	 * @return boolean
+	 */
 	public boolean processType3(String message) {
 		if (message == null) {
 			return false;
@@ -62,9 +86,10 @@ public class MessageProcessor {
 				Product product = iterator.next();
 				if (product.getType().equals(values[2])) {
 					product.setValue(product.getValue() + value);
-					System.out.println(product.getValue());
+				
 				}
 			}
+			System.out.println(queue);
 			return true;
 		}
 		case "Subtract": {
@@ -72,9 +97,10 @@ public class MessageProcessor {
 				Product product = iterator.next();
 				if (product.getType().equals(values[2])) {
 					product.setValue(product.getValue() - value);
-					System.out.println(product.getValue());
+				
 				}
 			}
+			System.out.println(queue);
 			return true;
 		}
 		case "Multiply": {
@@ -84,6 +110,7 @@ public class MessageProcessor {
 					product.setValue(product.getValue() * value);
 				}
 			}
+			System.out.println(queue);
 			return true;
 		}
 		default: {
@@ -91,12 +118,13 @@ public class MessageProcessor {
 		}
 		}
 	}
-
-	public void printQueue() {
-		System.out.println(queue);
-	}
+   /**
+    * prints the sale and value details for "apple at 10p"
+    * 
+    */
 	
-	private void printDetailedReport(){
+	
+	private void printDetailedReport1(){
 		Map<String, Long> map =  new HashMap<>();
 		for (Iterator<Product> iterator = queue.iterator(); iterator.hasNext();) {
 			Product product = iterator.next();
@@ -111,7 +139,20 @@ public class MessageProcessor {
 		Set<String> keys = map.keySet();
 		for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
 			String type = iterator.next();
-			System.out.println(type + "\t\t" + map.get(type) + "p");
+			System.out.println(queue.size()+type +"s"+ "\t\t" + map.get(type) + "p");
 		}
 	}
+	/**
+	 * prints the type and value details for "20 sales of apples at 10p"
+	 */
+	private void printDetailedReport2(){
+
+		long saleCount = 0;
+		long value = 0;
+		for(Product product : queue){
+			saleCount += product.getSize();
+			value += product.getValue() * product.getSize();
+		}
+		System.out.println(saleCount +" sales of"+ queue.get(0).getType() + " at \t\t" + value + "p");
+			}
 }
