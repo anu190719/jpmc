@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.interview.beans.Product;
@@ -13,7 +14,7 @@ import com.interview.beans.Product;
  * @author anu
  *
  */
-public class MessageProcessor{
+public class MessageProcessor implements MessageProcessorInterface{
 	private List<Product> queue = new ArrayList<Product>();
 	private int count = 0;
 
@@ -119,12 +120,12 @@ public class MessageProcessor{
 		}
 	}
    /**
-    * prints the sale and value details for "apple at 10p"
+    * prints the sale and value details for apple at 10p
     * 
     */
 	
 	
-	private void printDetailedReport1(){
+	public void printDetailedReport1(){
 		Map<String, Long> map =  new HashMap<>();
 		for (Iterator<Product> iterator = queue.iterator(); iterator.hasNext();) {
 			Product product = iterator.next();
@@ -136,7 +137,8 @@ public class MessageProcessor{
 			map.put(product.getType(), value);
 		}
 		
-		Set<String> keys = map.keySet();
+		
+	    Set<String> keys = map.keySet();
 		for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();) {
 			String type = iterator.next();
 			System.out.println(queue.size()+type +"s"+ "\t\t" + map.get(type) + "p");
@@ -145,7 +147,7 @@ public class MessageProcessor{
 	/**
 	 * prints the type and value details for "20 sales of apples at 10p"
 	 */
-	private void printDetailedReport2(){
+	public void printDetailedReport2(){
 
 		long saleCount = 0;
 		long value = 0;
